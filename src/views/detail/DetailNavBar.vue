@@ -33,6 +33,7 @@
       },
       titleClick(index) {
         this.currentIndex = index
+        this.$emit('detailTitleClick', index)
       }
     }
   }

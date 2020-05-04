@@ -38,7 +38,7 @@
   import FeatureView from "./FeatureView";
 
   import {getHomeMultiData, getHomeGoodsData} from "network/home";
-  import {debounce} from "common/utils";
+  import {itemListenerMixin} from "common/mixin";
 
   export default {
     name: "Home",
@@ -52,6 +52,7 @@
       Scroll,
       BackTop
     },
+    //mixins: [itemListenerMixin],
     data() {
       return {
         banners: [],
@@ -80,12 +81,15 @@
       this.getHomeGoodsData('sell');
     },
     mounted() {
-      //监听商品列表组件图片加载完毕后的事件
+      /*//监听商品列表组件图片加载完毕后的事件
       const refresh = debounce(this.$refs.scroll.refresh, 500)
       this.$bus.$on('itemImgLoaded', () => {
         //首先判断scroll对象是不是空
         refresh()
-      })
+      })*/
+    },
+    destroyed() {
+      this.$bus.$off('itemImgLoaded', this.itemImgListener)
     },
     activated() {
       this.$refs.scroll.scrollTo(0, this.saveY)

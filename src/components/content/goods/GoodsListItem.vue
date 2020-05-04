@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="goodsClick">
-    <img :src="goodsItem.show.img" alt="" @load="imageLoad">
+    <img v-lazy="showImage"  alt="" @load="imageLoad"> <!--:src="showImage"-->
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
@@ -20,10 +20,18 @@
         }
       }
     },
+    computed: {
+      //根据传入数据的不同, 返回不同的取值格式
+      showImage() {
+        return this.goodsItem.image || this.goodsItem.show.img
+      }
+    },
     methods: {
       imageLoad() {
         //通过事件总线$bus(需要在main.js里进行初始化)发射事件, 供其它组件进行监听(非父组件)
-        this.$bus.$emit('itemImgLoaded')
+        if(this.$route.path.indexOf('/home') > -1){
+          this.$bus.$emit('itemImgLoaded')
+        }
       },
       goodsClick() {
         //用push方便返回
